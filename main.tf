@@ -2,13 +2,13 @@ provider "aws" {
   region = "us-east-1" 
 }
 
-# Upload your SSH Public Key
+# Upload SSH Public Key
 resource "aws_key_pair" "deployer" {
   key_name   = "cloud_project_key"
   public_key = file("~/.ssh/cloud_project_key.pub")
 }
 
-# Enable security groups to open ports 22 and 80 [cite: 10]
+# Enable security groups to open ports 22 and 80
 resource "aws_security_group" "web_sg" {
   name        = "allow_web_ssh"
   description = "Allow SSH and HTTP"
@@ -42,7 +42,7 @@ resource "aws_instance" "web" {
   key_name      = aws_key_pair.deployer.key_name
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
-  # Install NGINX [cite: 4, 13] and disable internal firewall [cite: 14]
+  # Install NGINX and disable internal firewall
   user_data = <<-EOF
               #!/bin/bash
               sudo apt-get update
